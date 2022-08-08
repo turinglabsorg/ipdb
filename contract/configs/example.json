@@ -1,0 +1,10 @@
+{
+    "network": "localhost",
+    "contract_name": "IPDB",
+    "constructor_arguments": [],
+    "contract_address": "",
+    "owner_mnemonic": "",
+    "provider": "http://localhost:8545",
+    "owner_key": "",
+    "owner_address": ""
+}
