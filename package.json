@@ -1,0 +1,31 @@
+{
+  "name": "ipdb",
+  "version": "1.0.0",
+  "description": "A Database built on top of IPFS",
+  "main": "src/ipdb.js",
+  "type": "module",
+  "scripts": {
+    "test:local": "nodemon --no-warnings tests/local.js",
+    "test:chain": "nodemon --no-warnings tests/chain.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/turinglabsorg/ipdb.git"
+  },
+  "keywords": [
+    "database",
+    "ipfs"
+  ],
+  "author": "turinglabs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/turinglabsorg/ipdb/issues"
+  },
+  "homepage": "https://github.com/turinglabsorg/ipdb#readme",
+  "dependencies": {
+    "ethers": "^5.6.9",
+    "ipfs": "^0.63.5",
+    "js-ipfs": "^0.0.301",
+    "nodemon": "^2.0.19"
+  }
+}
