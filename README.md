@@ -23,7 +23,8 @@ Blockchain part is still a work in progress, will be updated later these weeks.
 ## Folder structure and technology
 
 Project is pretty simple, you'll find:
-- `src`: which is the main folder
+- `contract`: which contains the contract logic (WIP)
+- `src`: which is the main package folder
 - `tests`: which contains the test files
 
 As you may noticed entire project is a NodeJS module and it will be published on NPM once it will be ready for test.
