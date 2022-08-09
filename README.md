@@ -82,3 +82,10 @@ As you may noticed at the very beginning of the test there's this row:
 Created new DB identifier: 0x2DFdA093a7FD8c32B73A41c65F1e256d1439a225
 ```
 This means the database created a new EthersJS Wallet (awailable at `ipdb.wallet`) which can be used later to store the information inside the blockchain. For a production purpose should be better if you provide the address from the external and use the library only to handle database stuff.
+
+## TODO list
+
+- [ ] Add a web3.storage and nft.storage pinning system
+- [ ] Switch to CID v1
+- [ ] Add tests to contract folder
+- [ ] Add a .env file to select the contract and add pinning services token  
