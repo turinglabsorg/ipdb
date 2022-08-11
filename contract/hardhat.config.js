@@ -12,6 +12,9 @@ let hardhatConfigs = {
     ropsten: {
       url: provider
     },
+    goerli: {
+      url: provider
+    },
     ethereum: {
       url: provider
     }

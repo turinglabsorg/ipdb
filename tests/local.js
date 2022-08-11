@@ -1,6 +1,8 @@
 import { IPDB } from "../src/ipdb.js"
 
 const ipdb = new IPDB()
+const ethers = ipdb.ethers
+ipdb.wallet = ethers.Wallet.createRandom()
 
 const { db, id } = await ipdb.create("ipfsrocks")
 console.log("Contents are:", db)

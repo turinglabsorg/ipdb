@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "test:local": "nodemon --no-warnings tests/local.js",
-    "test:chain": "nodemon --no-warnings tests/chain.js"
+    "test:chain:create": "nodemon --no-warnings tests/chain:create.js",
+    "test:chain:retrieve": "nodemon --no-warnings tests/chain:retrieve.js",
+    "test:chain:read": "nodemon --no-warnings tests/chain:read.js"
   },
   "repository": {
     "type": "git",
@@ -23,9 +25,9 @@
   },
   "homepage": "https://github.com/turinglabsorg/ipdb#readme",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "ethers": "^5.6.9",
     "ipfs": "^0.63.5",
-    "js-ipfs": "^0.0.301",
     "nodemon": "^2.0.19"
   }
 }
