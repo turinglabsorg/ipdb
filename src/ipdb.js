@@ -11,66 +11,95 @@ export class IPDB {
     debug = false
     async create(name) {
         if (this.wallet !== undefined) {
-            if (this.debug) {
-                console.log("Creating IPFS instance..")
+            if (this.ipfs === undefined) {
+                if (this.debug) {
+                    console.log("Creating IPFS instance..")
+                }
+                this.ipfs = await IPFS.create({ silent: this.debug ? false : true })
             }
-            this.ipfs = await IPFS.create({ silent: this.debug ? false : true })
             let address = this.wallet.address
             let version = 0
-            this.contract = new ethers.Contract(this.contractAddress, this.abi, this.wallet)
+            if (this.contract === undefined) {
+                this.contract = new ethers.Contract(this.contractAddress, this.abi, this.wallet)
+            }
             let id = "/" + address + "/" + name + "/db" + version
-            // Creating root path
+            let dbExists = false
+            // Check if same database exists in blockchain
             try {
-                await this.ipfs.files.mkdir("/" + address)
+                if (this.debug) {
+                    console.log("Checking on-chain database:", name)
+                }
+                const onchain = await this.contract.get(address, name)
+                version = parseInt(onchain[1].toString())
+                if (this.debug) {
+                    console.log("On-chain version is:", version)
+                }
+                if (version > 0) {
+                    dbExists = true
+                }
             } catch (e) {
                 if (this.debug) {
-                    console.log("Root path exists..")
+                    console.log(e)
+                    console.log("Can't get latest version from blockchain..")
                 }
             }
-            // Creating specific path
-            try {
-                await this.ipfs.files.mkdir("/" + address + "/" + name)
-            } catch (e) {
-                if (this.debug) {
-                    console.log("Database path exists..")
-                }
-            }
-            // Check if database exists
-            let exists = false
-            try {
-                const stats = await this.ipfs.files.stat(id)
-                exists = true
-            } catch (e) {
-                if (this.debug) {
-                    console.log("Need to create database..")
-                }
-            }
-            if (!exists) {
+            if (!dbExists) {
+                // Creating root path
                 try {
-                    if (this.debug) {
-                        console.log("Creating new database at:", id)
-                    }
-                    await this.ipfs.files.touch(id)
-                    await this.ipfs.files.write(id, JSON.stringify({}), { cidVersion: 1 })
+                    await this.ipfs.files.mkdir("/" + address)
                 } catch (e) {
                     if (this.debug) {
-                        console.log("Can't write new database..")
+                        console.log("Root path exists..")
                     }
                 }
-            }
-            let db
-            try {
-                const chunks = []
-                for await (const chunk of this.ipfs.files.read(id)) {
-                    chunks.push(chunk)
+                // Creating specific path
+                try {
+                    await this.ipfs.files.mkdir("/" + address + "/" + name)
+                } catch (e) {
+                    if (this.debug) {
+                        console.log("Database path exists..")
+                    }
                 }
-                db = JSON.parse(chunks.join())
-            } catch (e) {
-                if (this.debug) {
-                    console.log("Can't open database..")
+                // Check if database exists
+                let exists = false
+                try {
+                    const stats = await this.ipfs.files.stat(id)
+                    exists = true
+                } catch (e) {
+                    if (this.debug) {
+                        console.log("Need to create database..")
+                    }
                 }
+                if (!exists) {
+                    try {
+                        if (this.debug) {
+                            console.log("Creating new database at:", id)
+                        }
+                        await this.ipfs.files.touch(id)
+                        await this.ipfs.files.write(id, JSON.stringify({}), { cidVersion: 1 })
+                    } catch (e) {
+                        if (this.debug) {
+                            console.log("Can't write new database..")
+                        }
+                    }
+                }
+                let db
+                try {
+                    const chunks = []
+                    for await (const chunk of this.ipfs.files.read(id)) {
+                        chunks.push(chunk)
+                    }
+                    db = JSON.parse(chunks.join())
+                } catch (e) {
+                    if (this.debug) {
+                        console.log("Can't open database..")
+                    }
+                }
+                return { db, id }
+            } else {
+                console.log("Same database exists, please use `retrieve` function to instantiate the database.")
+                return { db: false, id: false }
             }
-            return { db, id }
         } else {
             console.log("Wallet is undefined, must provide it first")
             return false
@@ -82,11 +111,15 @@ export class IPDB {
             if (this.debug) {
                 console.log("Creating IPFS instance..")
             }
-            this.ipfs = await IPFS.create({ silent: this.debug ? false : true })
+            if (this.ipfs === undefined) {
+                this.ipfs = await IPFS.create({ silent: this.debug ? false : true })
+            }
             let address = this.wallet.address
             let version = 1
             let cid
-            this.contract = new ethers.Contract(this.contractAddress, this.abi, this.wallet)
+            if (this.contract === undefined) {
+                this.contract = new ethers.Contract(this.contractAddress, this.abi, this.wallet)
+            }
             // Get latest version from blockchain
             try {
                 if (this.debug) {
