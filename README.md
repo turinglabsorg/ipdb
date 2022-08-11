@@ -76,16 +76,35 @@ Done! As you can see we created a database that contains two keys (`rocks` and `
 
 ## What about blockchain?
 
-As you may noticed at the very beginning of the test there's this row:
+As you may noticed at the very beginning of the test there's this piece of code:
 
 ```
-Created new DB identifier: 0x2DFdA093a7FD8c32B73A41c65F1e256d1439a225
+const provider = new ipdb.ethers.providers.JsonRpcProvider("https://goerli.infura.io/v3/" + process.env.INFURA_PROJECT_ID);
+ipdb.wallet = new ipdb.ethers.Wallet(process.env.OWNER_KEY).connect(provider)
 ```
-This means the database created a new EthersJS Wallet (awailable at `ipdb.wallet`) which can be used later to store the information inside the blockchain. For a production purpose should be better if you provide the address from the external and use the library only to handle database stuff.
 
+This means the database you must create a wallet or use a key you've in your `.env` file to instantiate the database. Otherwise it will not be able to store or retrieve databases.
+
+## Functions
+Main examples can be read inside `tests` folder, anyway there's a recap of all functions:
+### create(name)
+This function will create a new local instance of a database called `name`, this returns an `id` and the `db` itself which can be read or populated.
+
+### retrieve(name)
+This function will retrieve latest version of database from blockchain in form of CID and will create a local copy on your machine, so you can interact with it very fast.
+
+### put(id, content)
+This function will put specified `content` inside database provided by `id` parameter. The `id` database must exists inside the machine because was created or retrieved before.
+
+### stats(id)
+This function will return the informations about the database.
+
+### store(id)
+This function will store specified database's CID into the blockchain. At the moment the only support blockchain is Goerli, so make sure you have some funds to store the database or the transaction will fail.
 ## TODO list
 
+- [x] Switch to CID v1
+- [x] Add tests to contract folder
+- [x] Add a .env file to select the contract and add pinning services token  
 - [ ] Add a web3.storage and nft.storage pinning system
-- [ ] Switch to CID v1
-- [ ] Add tests to contract folder
-- [ ] Add a .env file to select the contract and add pinning services token  
+- [ ] Write dynamic NFT use case
