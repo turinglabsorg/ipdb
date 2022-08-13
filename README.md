@@ -85,6 +85,13 @@ ipdb.wallet = new ipdb.ethers.Wallet(process.env.OWNER_KEY).connect(provider)
 
 This means the database you must create a wallet or use a key you've in your `.env` file to instantiate the database. Otherwise it will not be able to store or retrieve databases.
 
+### Deployments
+Contracts are deployed in following blockchains:
+| Blockchain   | Address                               | 
+|--------------|---------------------------------------|
+| Rinkeby | 0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca |
+| Goerli  | 0x9Adf0998FEEb6A5E8d4227BF1F8DEb250Ee096A9 |
+
 ## Functions
 Main examples can be read inside `tests` folder, anyway there's a recap of all functions:
 ### create(name)
