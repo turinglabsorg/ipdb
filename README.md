@@ -1,4 +1,4 @@
-# IPDB (MVP)
+# IPDB
 
 IPDB (Interplanetary Database) is a key/value store database built on top of IPFS (Interplanetary File System).
 
