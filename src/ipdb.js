@@ -2,8 +2,12 @@ import * as IPFS from 'ipfs-core'
 import { ethers } from "ethers"
 import { ABI } from './abi.js'
 export class IPDB {
-    contractAddress = "0x9Adf0998FEEb6A5E8d4227BF1F8DEb250Ee096A9"
+    deployments = { 
+        goerli: "0x9Adf0998FEEb6A5E8d4227BF1F8DEb250Ee096A9", 
+        rinkeby: "0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca" 
+    }
     ethers = ethers
+    blockchain = 'goerli'
     ipfs
     wallet
     contract
@@ -20,7 +24,7 @@ export class IPDB {
             let address = this.wallet.address
             let version = 0
             if (this.contract === undefined) {
-                this.contract = new ethers.Contract(this.contractAddress, this.abi, this.wallet)
+                this.contract = new ethers.Contract(this.deployments[this.blockchain], this.abi, this.wallet)
             }
             let id = "/" + address + "/" + name + "/db" + version
             let dbExists = false
@@ -118,7 +122,7 @@ export class IPDB {
             let version = 1
             let cid
             if (this.contract === undefined) {
-                this.contract = new ethers.Contract(this.contractAddress, this.abi, this.wallet)
+                this.contract = new ethers.Contract(this.deployments[this.blockchain], this.abi, this.wallet)
             }
             // Get latest version from blockchain
             try {

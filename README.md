@@ -92,6 +92,19 @@ Contracts are deployed in following blockchains:
 | Rinkeby | 0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca |
 | Goerli  | 0x9Adf0998FEEb6A5E8d4227BF1F8DEb250Ee096A9 |
 
+Default blockchain is `Goerli` but you can switch from `Goerli` to `Rinkeby` like this:
+```
+const ipdb = new IPDB()
+ipdb.blockchain = 'rinkeby'
+```
+
+or you can also define your own custom smart contract like this:
+```
+const ipdb = new IPDB()
+ipdb.deployments.custom = '0x00000000000000YourOwnCustomSmartContract'
+ipdb.blockchain = 'custom'
+```
+
 ## Functions
 Main examples can be read inside `tests` folder, anyway there's a recap of all functions:
 ### create(name)

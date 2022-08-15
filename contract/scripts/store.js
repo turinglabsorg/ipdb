@@ -8,8 +8,8 @@ async function main() {
     let wallet = new ethers.Wallet(configs.owner_key).connect(provider)
     const contract = new ethers.Contract(configs.contract_address, ABI.abi, wallet)
 
-    const name = "test"
-    const cid = "CID4"
+    const name = "1"
+    const cid = "CID_NFT2"
     const result = await contract.store(name, cid)
     console.log(result)
 }
