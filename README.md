@@ -22,9 +22,10 @@ Another interesting feature is remote pinning to supported providers [Pinata](ht
 ## Folder structure and technology
 
 Project is pretty simple, you'll find:
-- `contract`: which contains the contract logic (WIP)
+- `contract`: which contains the contract logic
 - `src`: which is the main package folder
 - `tests`: which contains the test files
+- `.env`: which will contain all your variables, please remember to setup it first.
 
 As you may noticed entire project is a NodeJS module and it will be published on NPM once it will be ready for test.
 
@@ -33,8 +34,13 @@ As you may noticed entire project is a NodeJS module and it will be published on
 If you want to run some tests you can easily follow these steps, assuming you've NodeJS v16 installed and YARN:
 
 ```
-yarn 
-yarn test:local
+yarn
+cp .env.example .env
+```
+
+Now customize your `.env` file with your own keys, then you're able to run one of the tests:
+```
+yarn chain:create
 ```
 
 After some seconds you should be able to see something like:
@@ -125,7 +131,7 @@ This function will return the informations about the database.
 This function will store specified database's CID into the blockchain. At the moment the only support blockchain is Goerli, so make sure you have some funds to store the database or the transaction will fail.
 
 ### set(provider, jwt)
-This function will prepare the remote pinning provider, supported one are `pinata` and `web3storage`.
+This function will prepare the remote pinning provider, supported one are `pinata` and `web3storage`. Please remember to add `JWT` tokens in your `.env` file.
 
 ### pin(id, provider)
 This function will make a remote pinning of specified `id` to `provider`.
