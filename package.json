@@ -1,6 +1,6 @@
 {
   "name": "ipdb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Database built on top of IPFS",
   "main": "src/ipdb.js",
   "type": "module",
@@ -8,7 +8,9 @@
     "test:local": "nodemon --no-warnings tests/local.js",
     "test:chain:create": "nodemon --no-warnings tests/chain:create.js",
     "test:chain:retrieve": "nodemon --no-warnings tests/chain:retrieve.js",
-    "test:chain:read": "nodemon --no-warnings tests/chain:read.js"
+    "test:chain:read": "nodemon --no-warnings tests/chain:read.js",
+    "test:pin:pinata": "nodemon --no-warnings tests/pin:pinata.js",
+    "test:pin:web3storage": "nodemon --no-warnings tests/pin:web3storage.js"
   },
   "repository": {
     "type": "git",
@@ -25,9 +27,13 @@
   },
   "homepage": "https://github.com/turinglabsorg/ipdb#readme",
   "dependencies": {
+    "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "ethers": "^5.6.9",
+    "form-data": "^4.0.0",
     "ipfs": "^0.63.5",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "stream": "^0.0.2",
+    "web3.storage": "^4.4.0"
   }
 }

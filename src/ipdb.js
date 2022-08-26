@@ -1,10 +1,12 @@
 import * as IPFS from 'ipfs-core'
 import { ethers } from "ethers"
 import { ABI } from './abi.js'
+import { pinFileToPinata } from './providers/pinata.js'
+import { pinFileToWeb3Storage } from './providers/web3storage.js'
 export class IPDB {
-    deployments = { 
-        goerli: "0x9Adf0998FEEb6A5E8d4227BF1F8DEb250Ee096A9", 
-        rinkeby: "0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca" 
+    deployments = {
+        goerli: "0x9Adf0998FEEb6A5E8d4227BF1F8DEb250Ee096A9",
+        rinkeby: "0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca"
     }
     ethers = ethers
     blockchain = 'goerli'
@@ -13,6 +15,8 @@ export class IPDB {
     contract
     abi = ABI
     debug = false
+    providers = {}
+
     async create(name) {
         if (this.wallet !== undefined) {
             if (this.ipfs === undefined) {
@@ -26,7 +30,7 @@ export class IPDB {
             if (this.contract === undefined) {
                 this.contract = new ethers.Contract(this.deployments[this.blockchain], this.abi, this.wallet)
             }
-            let id = "/" + address + "/" + name + "/db" + version
+            let id = "/" + address + "/" + name + "/" + version
             let dbExists = false
             // Check if same database exists in blockchain
             try {
@@ -144,7 +148,7 @@ export class IPDB {
                 }
             }
             if (cid !== undefined) {
-                let id = "/" + address + "/" + name + "/db" + version
+                let id = "/" + address + "/" + name + "/" + version
                 let db
                 if (this.debug) {
                     console.log("Retrieving database from IPFS CID:", cid)
@@ -299,15 +303,20 @@ export class IPDB {
         if (this.contract !== undefined) {
             const split = id.split('/')
             if (split.length === 4) {
-                const stats = await this.stats(id)
                 if (split[1].toUpperCase() === this.wallet.address.toUpperCase()) {
                     const name = split[2]
+                    const chunks = []
+                    for await (const chunk of this.ipfs.files.read(id)) {
+                        chunks.push(chunk.toString())
+                    }
+                    const db = chunks.join()
+                    const hash = await this.ipfs.add(db, { cidVersion: 1 })
                     if (this.debug) {
                         console.log("Storing DB:", name)
-                        console.log("CID is:", stats.cid.toString())
+                        console.log("CID is:", hash.path)
                     }
                     try {
-                        const result = await this.contract.store(name, stats.cid.toString())
+                        const result = await this.contract.store(name, hash.path)
                         let newId = parseInt(split[3].replace('db', '')) + 1
                         let updated = id.replace(split[3], 'db' + newId)
                         if (this.debug) {
@@ -335,6 +344,66 @@ export class IPDB {
             }
         } else {
             console.log("Contract instance not found, please create it before store.")
+            return false
+        }
+    }
+
+    async set(provider, key) {
+        this.providers[provider] = key
+    }
+
+    async pin(id, provider) {
+        if (this.providers[provider] !== undefined) {
+            try {
+                const stats = await this.ipfs.files.stat(id)
+                if (stats.cid !== undefined) {
+                    const chunks = []
+                    for await (const chunk of this.ipfs.files.read(id)) {
+                        chunks.push(chunk.toString())
+                    }
+                    const db = chunks.join()
+                    const hash = await this.ipfs.add(db, { cidVersion: 1 })
+                    let pinned
+                    if (provider === 'pinata') {
+                        pinned = await pinFileToPinata(this.providers[provider], db, id, this.debug)
+                    } else if (provider === 'web3storage') {
+                        const version = id.split('/')[(id.split('/').length - 1)]
+                        pinned = await pinFileToWeb3Storage(this.providers[provider], db, version, this.debug)
+                    } else {
+                        if (this.debug) {
+                            console.log('Provider not recognized.')
+                        }
+                        return false
+                    }
+                    if (hash.path === pinned) {
+                        if (this.debug) {
+                            console.log('Pinning successfully verified.')
+                        }
+                        return pinned
+                    } else {
+                        if (this.debug) {
+                            console.log('Pinned hash is different from stored one.')
+                            console.log("Original:", hash.path)
+                            console.log("Pinned:", pinned)
+                        }
+                        return false
+                    }
+                } else {
+                    if (this.debug) {
+                        console.log("Can't find file in IPFS node")
+                    }
+                    return false
+                }
+            } catch (e) {
+                if (this.debug) {
+                    console.log(e)
+                }
+                return false
+            }
+        } else {
+            if (this.debug) {
+                console.log('Provider key not found.')
+            }
             return false
         }
     }

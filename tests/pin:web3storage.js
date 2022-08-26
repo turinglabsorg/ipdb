@@ -12,26 +12,17 @@ const { db, id } = await ipdb.retrieve("ipfsrocks", true)
 console.log("Contents are:", db)
 console.log('--')
 
-// Update database
-await ipdb.put(id, { rocks: true })
-const put1 = await ipdb.get(id, "rocks")
-console.log("`rocks` value is:", put1)
-console.log('--')
-
-// Update it again
-await ipdb.put(id, { power: Math.floor(Math.random() * 1000) })
-const put2 = await ipdb.get(id, "power")
-console.log("`power` value is:", put2)
-console.log('--')
-
 // Read stats from database
 const info = await ipdb.stats(id)
 console.log("Informations about db are:", info)
 console.log('--')
 
-const tx = await ipdb.store(id)
-console.log("Pending transaction at:", tx.hash)
-await tx.wait()
-console.log("Db stored successfully!")
+// Set Pinata Key
+console.log('Web3.Storage JWT is:', process.env.WEB3STORAGE_JWT)
+ipdb.set('web3storage', process.env.WEB3STORAGE_JWT)
+
+// Pin db remotely
+const pinned = await ipdb.pin(id, 'web3storage')
+console.log("Pinning result is:", pinned)
 
 process.exit()

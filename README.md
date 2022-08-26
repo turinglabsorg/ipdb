@@ -13,13 +13,12 @@ Each node is responsible, of course, of the pinning of the latest version of dat
 Similar to the `multiaddr` standard we created a standard which defines the user, the database and the version. So each database has it's own `dbid` which is something like:
 
 ```
-/0xEthereumAddress/DatabaseName/db<VERSION>
+/0xEthereumAddress/DatabaseName/<VERSION>
 ```
 
 Each version will be stored on-chain and will be recovered later for update or read it. Of course only the owner will be able to store the information on-chain.
 
-Blockchain part is still a work in progress, will be updated later these weeks.
-
+Another interesting feature is remote pinning to supported providers [Pinata](https://pinata.cloud) and [Web3Storage](https://web3.storage), if you like to add your provider here please open a pull request. Remote pinning will allow you to have a secure backup of your databases making them more distributed.
 ## Folder structure and technology
 
 Project is pretty simple, you'll find:
@@ -72,7 +71,10 @@ Informations about db are: {
 Nothing to do, closing..
 ```
 
-Done! As you can see we created a database that contains two keys (`rocks` and `power`) and the final CID is `QmXL26iGZ3MCAkpKnoBRpbc4oHH95nmjYF48FRWLYfk7Yv`. You can continue manipulate the database also if you close the window and use correct `dbid` to open it.
+Done! As you can see we created a database that contains two keys (`rocks` and `power`) and the final CID is `QmXL26iGZ3MCAkpKnoBRpbc4oHH95nmjYF48FRWLYfk7Yv`. 
+You can continue manipulate the database also if you close the terminal and use correct `dbid` to open it.
+
+You can try other tests that will help you understand better how this library works.
 
 ## What about blockchain?
 
@@ -121,10 +123,22 @@ This function will return the informations about the database.
 
 ### store(id)
 This function will store specified database's CID into the blockchain. At the moment the only support blockchain is Goerli, so make sure you have some funds to store the database or the transaction will fail.
+
+### set(provider, jwt)
+This function will prepare the remote pinning provider, supported one are `pinata` and `web3storage`.
+
+### pin(id, provider)
+This function will make a remote pinning of specified `id` to `provider`.
 ## TODO list
+
+If you want to help doing some stuff you can follow this list or write me at turinglabs@icloud.com or DM me on [Twitter](https://twitter.com/turinglabsorg).
 
 - [x] Switch to CID v1
 - [x] Add tests to contract folder
 - [x] Add a .env file to select the contract and add pinning services token  
-- [ ] Add a web3.storage and nft.storage pinning system
-- [ ] Write dynamic NFT use case
+- [x] Add a web3.storage and nft.storage pinning system
+- [x] Write dynamic NFT use case
+- [ ] Create a website for the project
+- [ ] Publish version to NPM
+- [ ] Create a pitch to explain the project
+- [ ] Create a Twitter account to make some marketing on it
