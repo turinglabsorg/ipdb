@@ -46,35 +46,42 @@ yarn chain:create
 After some seconds you should be able to see something like:
 
 ```
+Using provider: https://goerli.infura.io/v3/7e6812ca728848919e64a63a134a1e79
 Creating IPFS instance..
 Swarm listening on /ip4/127.0.0.1/tcp/4002/p2p/12D3KooWSZy8uChn5WRNyBh12sEK1bheYPwm2U9ikP9GxZUPzPNj
+Swarm listening on /ip4/192.168.1.22/tcp/4002/p2p/12D3KooWSZy8uChn5WRNyBh12sEK1bheYPwm2U9ikP9GxZUPzPNj
 Swarm listening on /ip4/172.17.0.1/tcp/4002/p2p/12D3KooWSZy8uChn5WRNyBh12sEK1bheYPwm2U9ikP9GxZUPzPNj
 Swarm listening on /ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWSZy8uChn5WRNyBh12sEK1bheYPwm2U9ikP9GxZUPzPNj
-Created new DB identifier: 0x2DFdA093a7FD8c32B73A41c65F1e256d1439a225
+Checking on-chain database: ipfs_rocks_1661516338036
+On-chain version is: 0
+Root path exists..
 Need to create database..
-Creating new database at: /0x2DFdA093a7FD8c32B73A41c65F1e256d1439a225/ipfsrocks/db000000
+Creating new database at: /0x5d0a965E6e8388fd39D897c2B2EED5c3074421d6/ipfs_rocks_1661516338036/0
 Contents are: {}
 --
 `rocks` value is: true
 --
 `power` value is: 100
 --
-Complete db is: { rocks: true, power: 100 }
---
 Informations about db are: {
-  cid: CID(QmXL26iGZ3MCAkpKnoBRpbc4oHH95nmjYF48FRWLYfk7Yv),
+  cid: CID(bafybeicdq2w4ulz72x7tli6qoyjjwtj7tyxzvngzk6kedhza3bydxrgpj4),
   type: 'file',
   size: 26,
-  cumulativeSize: 97,
+  cumulativeSize: 99,
   blocks: 1,
   local: undefined,
   sizeLocal: undefined,
   withLocality: false,
   mode: 420,
-  mtime: { secs: 1659927580, nsecs: 546000 }
+  mtime: { secs: 1661516344, nsecs: 371000 }
 }
 --
-Nothing to do, closing..
+Storing DB: ipfs_rocks_1661516338036
+CID is: bafkreifzd53l5ko3l77hxofxwyq4niw2uudw3g7xop32kufznwnsamlss4
+Storing database with new version at: /db1x5d0a965E6e8388fd39D897c2B2EED5c3074421d6/ipfs_rocks_1661516338036/0
+Pending transaction at: 0x72e5b573820434af206c791bb0d9aa61b3428dcadbcaabe88eb2f1d46b6093fb
+💸 Gas used: 139237
+Db stored successfully!
 ```
 
 Done! As you can see we created a database that contains two keys (`rocks` and `power`) and the final CID is `QmXL26iGZ3MCAkpKnoBRpbc4oHH95nmjYF48FRWLYfk7Yv`. 
@@ -123,6 +130,9 @@ This function will retrieve latest version of database from blockchain in form o
 
 ### put(id, content)
 This function will put specified `content` inside database provided by `id` parameter. The `id` database must exists inside the machine because was created or retrieved before.
+
+### get(id, key)
+This function will return value of specified `key` from `id`.
 
 ### stats(id)
 This function will return the informations about the database.

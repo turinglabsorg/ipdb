@@ -88,6 +88,7 @@ export class IPDB {
                     } catch (e) {
                         if (this.debug) {
                             console.log("Can't write new database..")
+                            console.log(e)
                         }
                     }
                 }
@@ -212,6 +213,7 @@ export class IPDB {
                     } catch (e) {
                         if (this.debug) {
                             console.log("Can't write new database..")
+                            console.log(e)
                         }
                     }
                 }
@@ -322,11 +324,12 @@ export class IPDB {
                         if (this.debug) {
                             console.log("Storing database with new version at:", updated)
                         }
-                        await this.ipfs.files.cp(id, updated, { cidVersion: 1 })
+                        await this.ipfs.files.cp(id, updated, { cidVersion: 1, parents: true })
                         return result
                     } catch (e) {
                         if (this.debug) {
-                            console.log("Can't write new database..")
+                            console.log("Can't store database..")
+                            console.log(e)
                         }
                         return false
                     }

@@ -8,7 +8,7 @@ console.log("Using provider:", "https://goerli.infura.io/v3/" + process.env.INFU
 const provider = new ipdb.ethers.providers.JsonRpcProvider("https://goerli.infura.io/v3/" + process.env.INFURA_PROJECT_ID);
 ipdb.wallet = new ipdb.ethers.Wallet(process.env.OWNER_KEY).connect(provider)
 
-const { db, id } = await ipdb.retrieve("ipfsrocks", true)
+const { db, id } = await ipdb.retrieve("ipfs_rocks", true)
 console.log("Contents are:", db)
 console.log('--')
 
@@ -30,8 +30,13 @@ console.log("Informations about db are:", info)
 console.log('--')
 
 const tx = await ipdb.store(id)
-console.log("Pending transaction at:", tx.hash)
-await tx.wait()
-console.log("Db stored successfully!")
+if (tx.hash !== undefined) {
+    console.log("Pending transaction at:", tx.hash)
+    const receipt = await tx.wait()
+    console.log("💸 Gas used:", receipt.gasUsed.toString())
+    console.log("Db stored successfully!")
+} else {
+    console.log("Error while creating transaction..")
+}
 
 process.exit()
