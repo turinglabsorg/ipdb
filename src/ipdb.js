@@ -6,7 +6,8 @@ import { pinFileToWeb3Storage } from './providers/web3storage.js'
 export class IPDB {
     deployments = {
         goerli: "0xB4E1E4C194972703f9ecfeaB396B3B6aaccd52Ab",
-        rinkeby: "0xC1755f486Fa83912a94b0A1904e74722d557AB0b"
+        rinkeby: "0xC1755f486Fa83912a94b0A1904e74722d557AB0b",
+        "aurora-testnet": "0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca"
     }
     ethers = ethers
     blockchain = 'goerli'
@@ -30,7 +31,7 @@ export class IPDB {
             if (this.contract === undefined) {
                 this.contract = new ethers.Contract(this.deployments[this.blockchain], this.abi, this.wallet)
             }
-            let id = "/" + address + "/" + name + "/" + version
+            let id = "/" + address + "/" + name + "/ipdb" + version
             let dbExists = false
             // Check if same database exists in blockchain
             try {
@@ -149,7 +150,7 @@ export class IPDB {
                 }
             }
             if (cid !== undefined) {
-                let id = "/" + address + "/" + name + "/" + version
+                let id = "/" + address + "/" + name + "/ipdb" + version
                 let db
                 if (this.debug) {
                     console.log("Retrieving database from IPFS CID:", cid)
@@ -159,7 +160,12 @@ export class IPDB {
                     for await (const chunk of this.ipfs.cat(cid)) {
                         chunks.push(chunk.toString())
                     }
-                    db = JSON.parse(chunks.join())
+                    if (this.debug) {
+                        console.log("RAW DB:", chunks.join())
+                    }
+                    if (chunks.join().length > 0) {
+                        db = JSON.parse(chunks.join())
+                    }
                 } catch (e) {
                     if (this.debug) {
                         console.log(e)
@@ -319,12 +325,17 @@ export class IPDB {
                     }
                     try {
                         const result = await this.contract.store(name, hash.path)
-                        let newId = parseInt(split[3].replace('db', '')) + 1
-                        let updated = id.replace(split[3], 'db' + newId)
+                        let newId = parseInt(split[3].replace('ipdb', '')) + 1
+                        let updated = split[0] + '/' + split[1] + '/' + split[2] + '/ipdb' + newId
                         if (this.debug) {
                             console.log("Storing database with new version at:", updated)
                         }
-                        await this.ipfs.files.cp(id, updated, { cidVersion: 1, parents: true })
+                        try {
+                            await this.ipfs.files.cp(id, updated, { cidVersion: 1 })
+                        } catch (e) {
+                            console.log("Can't make new copy.")
+                            console.log("Trying copying at:", updated)
+                        }
                         return result
                     } catch (e) {
                         if (this.debug) {
@@ -370,7 +381,7 @@ export class IPDB {
                     if (provider === 'pinata') {
                         pinned = await pinFileToPinata(this.providers[provider], db, id, this.debug)
                     } else if (provider === 'web3storage') {
-                        const version = id.split('/')[(id.split('/').length - 1)]
+                        const version = id.split('/')[(id.split('/').length - 1)].replace('ipdb', '')
                         pinned = await pinFileToWeb3Storage(this.providers[provider], db, version, this.debug)
                     } else {
                         if (this.debug) {

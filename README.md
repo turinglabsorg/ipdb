@@ -52,11 +52,11 @@ Swarm listening on /ip4/127.0.0.1/tcp/4002/p2p/12D3KooWSZy8uChn5WRNyBh12sEK1bheY
 Swarm listening on /ip4/192.168.1.22/tcp/4002/p2p/12D3KooWSZy8uChn5WRNyBh12sEK1bheYPwm2U9ikP9GxZUPzPNj
 Swarm listening on /ip4/172.17.0.1/tcp/4002/p2p/12D3KooWSZy8uChn5WRNyBh12sEK1bheYPwm2U9ikP9GxZUPzPNj
 Swarm listening on /ip4/127.0.0.1/tcp/4003/ws/p2p/12D3KooWSZy8uChn5WRNyBh12sEK1bheYPwm2U9ikP9GxZUPzPNj
-Checking on-chain database: ipfs_rocks_1661516338036
+Checking on-chain database: ipdbrocks_1661516338036
 On-chain version is: 0
 Root path exists..
 Need to create database..
-Creating new database at: /0x5d0a965E6e8388fd39D897c2B2EED5c3074421d6/ipfs_rocks_1661516338036/0
+Creating new database at: /0x5d0a965E6e8388fd39D897c2B2EED5c3074421d6/ipdbrocks_1661516338036/0
 Contents are: {}
 --
 `rocks` value is: true
@@ -76,9 +76,9 @@ Informations about db are: {
   mtime: { secs: 1661516344, nsecs: 371000 }
 }
 --
-Storing DB: ipfs_rocks_1661516338036
+Storing DB: ipdbrocks_1661516338036
 CID is: bafkreifzd53l5ko3l77hxofxwyq4niw2uudw3g7xop32kufznwnsamlss4
-Storing database with new version at: /db1x5d0a965E6e8388fd39D897c2B2EED5c3074421d6/ipfs_rocks_1661516338036/0
+Storing database with new version at: /db1x5d0a965E6e8388fd39D897c2B2EED5c3074421d6/ipdbrocks_1661516338036/0
 Pending transaction at: 0x72e5b573820434af206c791bb0d9aa61b3428dcadbcaabe88eb2f1d46b6093fb
 💸 Gas used: 139237
 Db stored successfully!

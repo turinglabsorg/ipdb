@@ -4,7 +4,7 @@ const ipdb = new IPDB()
 const ethers = ipdb.ethers
 ipdb.wallet = ethers.Wallet.createRandom()
 
-const { db, id } = await ipdb.create("ipfs_rocks")
+const { db, id } = await ipdb.create("ipdbrocks")
 console.log("Contents are:", db)
 console.log('--')
 

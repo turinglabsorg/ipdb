@@ -8,7 +8,7 @@ console.log("Using provider:", "https://goerli.infura.io/v3/" + process.env.INFU
 const provider = new ipdb.ethers.providers.JsonRpcProvider("https://goerli.infura.io/v3/" + process.env.INFURA_PROJECT_ID);
 ipdb.wallet = new ipdb.ethers.Wallet(process.env.OWNER_KEY).connect(provider)
 
-const { db, id } = await ipdb.create("ipfs_rocks")
+const { db, id } = await ipdb.create("ipdbrocks")
 
 if (db !== false) {
     console.log("Contents are:", db)
