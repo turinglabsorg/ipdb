@@ -153,8 +153,13 @@ If you want to help doing some stuff you can follow this list or write me at tur
 - [x] Add tests to contract folder
 - [x] Add a .env file to select the contract and add pinning services token  
 - [x] Add a web3.storage and nft.storage pinning system
-- [x] Write dynamic NFT use case
+- [ ] Add PubSub support to exchange data between nodes
 - [ ] Create a website for the project
 - [ ] Publish version to NPM
 - [ ] Create a pitch to explain the project
 - [ ] Create a Twitter account to make some marketing on it
+
+## Use cases
+- [x] Dynamic NFT use case
+- [ ] Decentralized git use case: each database can represent git folders, each git folder contains files, each file is hashed and uploaded as well
+- [ ] The "Google's IPFS" use case: a collaborative repository of data where anyone can publish formatted metadatas (needs an oracle)

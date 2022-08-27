@@ -8,7 +8,7 @@ async function main() {
     let wallet = new ethers.Wallet(configs.owner_key).connect(provider)
     const contract = new ethers.Contract(configs.contract_address, ABI.abi, wallet)
 
-    const name = "test"
+    const name = "1"
     const result = await contract.get(wallet.address, name)
     console.log(result)
 }
