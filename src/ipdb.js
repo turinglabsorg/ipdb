@@ -5,8 +5,8 @@ import { pinFileToPinata } from './providers/pinata.js'
 import { pinFileToWeb3Storage } from './providers/web3storage.js'
 export class IPDB {
     deployments = {
-        goerli: "0x9Adf0998FEEb6A5E8d4227BF1F8DEb250Ee096A9",
-        rinkeby: "0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca"
+        goerli: "0xB4E1E4C194972703f9ecfeaB396B3B6aaccd52Ab",
+        rinkeby: "0xC1755f486Fa83912a94b0A1904e74722d557AB0b"
     }
     ethers = ethers
     blockchain = 'goerli'
