@@ -25,19 +25,13 @@ ipdb.wallet = new ipdb.ethers.Wallet(process.env.OWNER_KEY).connect(provider)
 
 const { db, id } = await ipdb.retrieve("ipdbrocks", true)
 if (db !== undefined) {
-    console.log("Contents are:", db)
+    console.log('--')
+    console.log("Previous contents are:", db)
     console.log('--')
 
     // Update database
-    await ipdb.put(id, { rocks: true })
-    const put1 = await ipdb.get(id, "rocks")
-    console.log("`rocks` value is:", put1)
-    console.log('--')
-
-    // Update it again
-    await ipdb.put(id, { power: Math.floor(Math.random() * 1000) })
-    const put2 = await ipdb.get(id, "power")
-    console.log("`power` value is:", put2)
+    const updated = await ipdb.put(id, { power: Math.floor(Math.random() * 1000) })
+    console.log("Updated contents are:", updated)
     console.log('--')
 
     // Read stats from database

@@ -1,6 +1,6 @@
 {
   "name": "ipdb",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A Database built on top of IPFS",
   "main": "src/ipdb.js",
   "type": "module",

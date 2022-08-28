@@ -12,6 +12,9 @@ let hardhatConfigs = {
     ropsten: {
       url: provider
     },
+    mumbai: {
+      url: provider
+    },
     taurora: {
       url: provider
     },

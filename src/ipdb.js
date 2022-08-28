@@ -7,7 +7,8 @@ export class IPDB {
     deployments = {
         goerli: "0xB4E1E4C194972703f9ecfeaB396B3B6aaccd52Ab",
         rinkeby: "0xC1755f486Fa83912a94b0A1904e74722d557AB0b",
-        "aurora-testnet": "0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca"
+        "aurora-testnet": "0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca",
+        mumbai: "0x1Aa65998a6751464FACD2f62Fa28e5B0034496ca"
     }
     ethers = ethers
     blockchain = 'goerli'
@@ -31,7 +32,7 @@ export class IPDB {
             if (this.contract === undefined) {
                 this.contract = new ethers.Contract(this.deployments[this.blockchain], this.abi, this.wallet)
             }
-            let id = "/" + address + "/" + name + "/ipdb" + version
+            let id = "/" + address + "/" + name + "/ipdb" + version + '.json'
             let dbExists = false
             // Check if same database exists in blockchain
             try {
@@ -150,7 +151,7 @@ export class IPDB {
                 }
             }
             if (cid !== undefined) {
-                let id = "/" + address + "/" + name + "/ipdb" + version
+                let id = "/" + address + "/" + name + "/ipdb" + version + '.json'
                 let db
                 if (this.debug) {
                     console.log("Retrieving database from IPFS CID:", cid)
@@ -161,15 +162,16 @@ export class IPDB {
                         chunks.push(chunk.toString())
                     }
                     if (this.debug) {
-                        console.log("RAW DB:", chunks.join())
+                        console.log("RETRIEVED RAW DB:", chunks.join())
                     }
                     if (chunks.join().length > 0) {
-                        db = JSON.parse(chunks.join())
+                        db = JSON.parse(chunks.join().replace('{{', '{').replace('}}', '}'))
                     }
                 } catch (e) {
                     if (this.debug) {
                         console.log(e)
                         console.log("Can't open database..")
+                        return false
                     }
                 }
                 // Creating root path
@@ -242,7 +244,7 @@ export class IPDB {
             for await (const chunk of this.ipfs.files.read(id)) {
                 chunks.push(chunk.toString())
             }
-            return JSON.parse(chunks.join())
+            return JSON.parse(chunks.join().replace('{{', '{').replace('}}', '}'))
         } catch (e) {
             if (this.debug) {
                 console.log(e)
@@ -257,28 +259,12 @@ export class IPDB {
             for await (const chunk of this.ipfs.files.read(id)) {
                 chunks.push(chunk.toString())
             }
-            let db = JSON.parse(chunks.join())
+            let db = JSON.parse(chunks.join().replace('{{', '{').replace('}}', '}'))
             for (let k in doc) {
                 db[k] = doc[k]
             }
             await this.ipfs.files.write(id, JSON.stringify(db), { cidVersion: 1 })
-            let updated
-            try {
-                const chunks = []
-                for await (const chunk of this.ipfs.files.read(id)) {
-                    chunks.push(chunk)
-                }
-                if (this.debug) {
-                    console.log("RAW DB:", chunks.join())
-                }
-                updated = JSON.parse(chunks.join())
-            } catch (e) {
-                if (this.debug) {
-                    console.log(e)
-                    console.log("Can't open updated database..")
-                }
-            }
-            return updated
+            return db
         } catch (e) {
             console.log(e)
             return false
@@ -329,15 +315,17 @@ export class IPDB {
                     try {
                         const result = await this.contract.store(name, hash.path)
                         let newId = parseInt(split[3].replace('ipdb', '')) + 1
-                        let updated = split[0] + '/' + split[1] + '/' + split[2] + '/ipdb' + newId
+                        let updated = split[0] + '/' + split[1] + '/' + split[2] + '/ipdb' + newId + '.json'
                         if (this.debug) {
                             console.log("Storing database with new version at:", updated)
                         }
                         try {
-                            await this.ipfs.files.cp(id, updated, { cidVersion: 1 })
+                            await this.ipfs.files.cp(id, updated, { cidVersion: 1, parent: true })
                         } catch (e) {
                             console.log("Can't make new copy.")
+                            console.log("Tryinig copy from:", id)
                             console.log("Trying copying at:", updated)
+                            console.log(e)
                         }
                         return result
                     } catch (e) {
