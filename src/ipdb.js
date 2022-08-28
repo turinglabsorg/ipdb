@@ -313,6 +313,9 @@ export class IPDB {
                         console.log("CID is:", hash.path)
                     }
                     try {
+                        if (this.debug) {
+                            console.log("Creating blockchain transaction..")
+                        }
                         const result = await this.contract.store(name, hash.path)
                         let newId = parseInt(split[3].replace('ipdb', '')) + 1
                         let updated = split[0] + '/' + split[1] + '/' + split[2] + '/ipdb' + newId + '.json'
@@ -320,12 +323,27 @@ export class IPDB {
                             console.log("Storing database with new version at:", updated)
                         }
                         try {
-                            await this.ipfs.files.cp(id, updated, { cidVersion: 1, parent: true })
+                            await this.ipfs.files.rm(updated)
+                            if (this.debug) {
+                                console.log("Removing previous stored version, same /address/name/db found.")
+                            }
                         } catch (e) {
-                            console.log("Can't make new copy.")
-                            console.log("Tryinig copy from:", id)
-                            console.log("Trying copying at:", updated)
-                            console.log(e)
+                            if (this.debug) {
+                                console.log("No version found, proceeding as expected.")
+                            }
+                        }
+                        try {
+                            await this.ipfs.files.cp(id, updated, { cidVersion: 1, parent: true })
+                            if (this.debug) {
+                                console.log("New version created correctly.")
+                            }
+                        } catch (e) {
+                            if (this.debug) {
+                                console.log("Can't make new copy.")
+                                console.log("Tryinig copy from:", id)
+                                console.log("Trying copying at:", updated)
+                                console.log(e)
+                            }
                         }
                         return result
                     } catch (e) {

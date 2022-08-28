@@ -4,7 +4,6 @@ dotenv.config()
 
 const ipdb = new IPDB()
 ipdb.debug = true
-console.log("Using provider:", "https://goerli.infura.io/v3/" + process.env.INFURA_PROJECT_ID)
 let provider
 if (process.env.INFURA_PROJECT_ID !== undefined) {
     console.log("Using provider:", "https://goerli.infura.io/v3/" + process.env.INFURA_PROJECT_ID)
@@ -23,7 +22,7 @@ if (process.env.BLOCKCHAIN !== undefined) {
 
 ipdb.wallet = new ipdb.ethers.Wallet(process.env.OWNER_KEY).connect(provider)
 
-const { db, id } = await ipdb.retrieve("ipdbrocks")
+const { db, id } = await ipdb.retrieve("ipdb_rocks")
 console.log("Contents are:", db)
 console.log('--')
 
