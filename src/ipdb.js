@@ -268,6 +268,9 @@ export class IPDB {
                 for await (const chunk of this.ipfs.files.read(id)) {
                     chunks.push(chunk)
                 }
+                if (this.debug) {
+                    console.log("RAW DB:", chunks.join())
+                }
                 updated = JSON.parse(chunks.join())
             } catch (e) {
                 if (this.debug) {
