@@ -22,7 +22,7 @@ if (process.env.BLOCKCHAIN !== undefined) {
 
 ipdb.wallet = new ipdb.ethers.Wallet(process.env.OWNER_KEY).connect(provider)
 
-const { db, id } = await ipdb.retrieve("ipdb_rocks")
+const { db, id } = await ipdb.retrieve("ipdb_rocks_1")
 console.log("Contents are:", db)
 console.log('--')
 
